@@ -1,0 +1,14 @@
+# Godot-specific ignores
+.godot/
+*.import
+export.cfg
+export_presets.cfg
+
+# Windows-specific ignores
+Thumbs.db
+desktop.ini
+
+# Build/Export ignores (we don't want to upload the 90MB .exe every time!)
+*.exe
+*.pck
+*.zip
