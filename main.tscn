@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://lpfppcxxcirr"]
+
+[ext_resource type="Script" uid="uid://ce0or11ao8nr5" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://bxdoecbdhlqd1" path="res://Placeholder_mochi.jpg" id="2_0xm2m"]
+
+[node name="Main" type="Node2D" unique_id=1006355983]
+script = ExtResource("1_ig7tw")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=904595911]
+clip_contents = true
+offset_top = 1.0
+offset_right = 1914.0
+offset_bottom = 1200.0
+color = Color(0.73616415, 0.4827419, 0.12338633, 1)
+
+[node name="MochiPlaceholder" type="Sprite2D" parent="." unique_id=1077699369]
+position = Vector2(960, 600)
+texture = ExtResource("2_0xm2m")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=1555886685]
