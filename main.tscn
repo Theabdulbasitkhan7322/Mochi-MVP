@@ -1,20 +1,46 @@
 [gd_scene format=3 uid="uid://lpfppcxxcirr"]
 
-[ext_resource type="Script" uid="uid://ce0or11ao8nr5" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://d4hkov2korqy8" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://bxdoecbdhlqd1" path="res://Placeholder_mochi.jpg" id="2_0xm2m"]
+[ext_resource type="VideoStream" uid="uid://dkj0glrkpxlf7" path="res://assets/skyclip.ogv" id="3_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://cfli3iff1wkti" path="res://assets/room_bg.png" id="3_h2yge"]
 
 [node name="Main" type="Node2D" unique_id=1006355983]
-script = ExtResource("1_ig7tw")
+script = ExtResource("1_1bvp3")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=904595911]
-clip_contents = true
-offset_top = 1.0
-offset_right = 1914.0
-offset_bottom = 1200.0
-color = Color(0.73616415, 0.4827419, 0.12338633, 1)
+[node name="RoomBackground" type="TextureRect" parent="." unique_id=278267558]
+custom_minimum_size = Vector2(1920, 1200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0000002
+offset_right = 1923.0
+offset_bottom = 1203.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.0034922708
+texture = ExtResource("3_h2yge")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1201006711]
+clip_children = 1
+polygon = PackedVector2Array(1293, 301, 1293, 301, 1892, 241, 1887, 833, 1297, 792)
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="Polygon2D" unique_id=793921275]
+offset_left = 1264.0
+offset_top = 242.0
+offset_right = 1934.0
+offset_bottom = 851.0
+stream = ExtResource("3_1bvp3")
+autoplay = true
+expand = true
+loop = true
 
 [node name="MochiPlaceholder" type="Sprite2D" parent="." unique_id=1077699369]
-position = Vector2(960, 600)
+position = Vector2(738, 1006.00006)
+scale = Vector2(0.4714674, 0.36956522)
 texture = ExtResource("2_0xm2m")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=1555886685]

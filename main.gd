@@ -1,12 +1,24 @@
 extends Node2D
 
-var is_inside = false
-var screen_size
+var is_inside = true
+
+@onready var room_bg = $RoomBackground
+@onready var window_mask = $Polygon2D
+@onready var video_player = $Polygon2D/VideoStreamPlayer
+@onready var mochi = $MochiPlaceholder
+
+# Preload your DAY videos
+var clear_day = preload("res://assets/skyclip.ogv")
+# var rain_day = preload("res://assets/rain_day.ogv") # Add this later!
+
+# Preload your NIGHT videos
+var clear_night = preload("res://assets/NightTime.ogv")
+# var rain_night = preload("res://assets/rain_night.ogv") # Add this later!
 
 func _ready():
-	screen_size = DisplayServer.screen_get_size()
-	$ColorRect.position = Vector2(0, 0)
-	$ColorRect.size = screen_size
+	# Apply performance optimizations for the laptop battery
+	Engine.max_fps = 30 
+	
 	$HTTPRequest.connect("request_completed", _on_weather_received)
 	fetch_weather()
 
@@ -14,33 +26,43 @@ func fetch_weather():
 	var url = "https://api.open-meteo.com/v1/forecast?latitude=28.5706&longitude=77.3272&current_weather=true"
 	$HTTPRequest.request(url)
 
-func _on_weather_received(result, response_code, headers, body):
+func _on_weather_received(_result, response_code, _headers, body):
 	if response_code == 200:
 		var json = JSON.new()
-		json.parse(body.get_string_from_utf8())
-		var data = json.get_data()
-		var weather_code = data["current_weather"]["weathercode"]
-		print("Weather code received: ", weather_code)
-		apply_weather(weather_code)
+		var error = json.parse(body.get_string_from_utf8())
+		if error == OK:
+			var data = json.data
+			var weather_code = data["current_weather"]["weathercode"]
+			var is_day = data["current_weather"]["is_day"] # 1 = Day, 0 = Night
+			
+			print("Weather code: ", weather_code, " | Is Day: ", is_day)
+			apply_weather(weather_code, is_day)
+		else:
+			print("JSON Parse Error")
 	else:
 		print("Weather fetch failed: ", response_code)
 
-func apply_weather(code):
-	if code == 0:
-		$ColorRect.color = Color(0.53, 0.81, 0.98)
-		print("Clear sky")
-	elif code <= 3:
-		$ColorRect.color = Color(0.74, 0.74, 0.74)
-		print("Cloudy")
-	elif code <= 67:
-		$ColorRect.color = Color(0.40, 0.40, 0.55)
-		print("Rainy")
-	elif code <= 77:
-		$ColorRect.color = Color(0.85, 0.92, 0.98)
-		print("Snowy")
+func apply_weather(code, is_day):
+	if is_day == 1:
+		# --- DAYTIME LOGIC ---
+		if code == 0:
+			video_player.stream = clear_day
+			print("Playing Day: Clear")
+		elif code <= 67:
+			# video_player.stream = rain_day
+			print("Playing Day: Rainy")
 	else:
-		$ColorRect.color = Color(0.30, 0.30, 0.40)
-		print("Storm")
+		# --- NIGHTTIME LOGIC ---
+		if code == 0:
+			video_player.stream = clear_night
+			print("Playing Night: Clear")
+		elif code <= 67:
+			# video_player.stream = rain_night
+			print("Playing Night: Rainy")
+			
+	# Play the selected video
+	if video_player.stream != null:
+		video_player.play()
 
 func _input(event):
 	if event is InputEventKey:
@@ -50,10 +72,10 @@ func _input(event):
 func toggle_mode():
 	is_inside = !is_inside
 	if is_inside:
-		$ColorRect.color = Color(0.15, 0.15, 0.20)
-		$MochiPlaceholder.scale = Vector2(1.5, 1.5)
-		print("INSIDE MODE")
+		room_bg.visible = true
+		window_mask.visible = true
+		mochi.scale = Vector2(1.0, 1.0)
 	else:
-		fetch_weather()
-		$MochiPlaceholder.scale = Vector2(1.0, 1.0)
-		print("OUTSIDE MODE")
+		room_bg.visible = false
+		window_mask.visible = false
+		mochi.scale = Vector2(1.5, 1.5)
