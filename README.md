@@ -82,8 +82,8 @@ Hearth is built around intelligent, context-aware interaction — not hardcoded 
 
 - [x] Step 1 — Godot window rendering as desktop wallpaper
 - [x] Step 2 — Inside / outside mode with transition
-- [ ] Step 3 — Live weather window via Open-Meteo API
-- [ ] Step 4 — Full room scene in Godot
+- [x] Step 3 — Live weather window via Open-Meteo API
+- [x] Step 4 — Full room scene in Godot
 - [ ] Step 5 — Mochi character with idle animation
 - [ ] Step 6 — AI-powered onboarding conversation
 - [ ] Step 7 — Task system with pinboard interaction
